@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'groq' => [
+    'key' => env('GROQ_API_KEY'),
+    'model' => env('GROQ_MODEL', 'openai/gpt-oss-120b'),
+],
 
 ];
