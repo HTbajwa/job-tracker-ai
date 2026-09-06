@@ -112,6 +112,7 @@ export default function Index({ applications, filters }) {
                                         <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Role</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Applied Date</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Follow-up</th>
                                         <th className="px-6 py-3 text-right text-xs font-medium uppercase text-gray-500">Actions</th>
                                     </tr>
                                 </thead>
@@ -127,7 +128,32 @@ export default function Index({ applications, filters }) {
                                                     {application.status}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4">{application.applied_date}</td>
+                                        <dd className="px-6 py-4 text-gray-900">
+    {new Date(application.applied_date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    })}
+</dd>
+
+<td className="px-6 py-4">
+    {application.follow_up_date ? (
+        <span
+            className={
+                new Date(application.follow_up_date) < new Date().setHours(0, 0, 0, 0)
+                    ? 'font-medium text-orange-600'
+                    : 'text-gray-600'
+            }
+        >
+            {new Date(application.follow_up_date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+            })}
+        </span>
+    ) : (
+        <span className="text-gray-400">—</span>
+    )}
+</td>
                                             <td className="px-6 py-4 text-right text-sm">
                                                 <Link
                                                     href={route('applications.show', application.id)}

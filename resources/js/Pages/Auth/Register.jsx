@@ -11,6 +11,8 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+         resume_text: '',
+          resume_pdf: null,
     });
 
     const submit = (e) => {
@@ -101,6 +103,30 @@ export default function Register() {
                         className="mt-2"
                     />
                 </div>
+<div className="mt-4">
+    <InputLabel htmlFor="resume_pdf" value="Upload Resume (PDF, optional)" />
+    <input
+        id="resume_pdf"
+        type="file"
+        accept="application/pdf"
+        className="mt-1 block w-full text-sm text-gray-600"
+        onChange={(e) => setData('resume_pdf', e.target.files[0])}
+    />
+    <InputError message={errors.resume_pdf} className="mt-2" />
+    <p className="mt-1 text-xs text-gray-500">Or paste your resume/skills summary as text below.</p>
+</div>
+                <div className="mt-4">
+    <InputLabel htmlFor="resume_text" value="Resume / Skills Summary (optional)" />
+    <textarea
+        id="resume_text"
+        rows={4}
+        placeholder="Paste a short summary of your skills, tech stack, and experience — this powers the AI Match Score feature."
+        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+        value={data.resume_text}
+        onChange={(e) => setData('resume_text', e.target.value)}
+    />
+    <InputError message={errors.resume_text} className="mt-2" />
+</div>
 
                 <div className="mt-4 flex items-center justify-end">
                     <Link

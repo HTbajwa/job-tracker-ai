@@ -13,6 +13,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Services\ResumeParserService;
+use Illuminate\Support\Facades\Storage;
 
 class RegisteredUserController extends Controller
 {
@@ -29,24 +31,36 @@ class RegisteredUserController extends Controller
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+   public function store(Request $request, ResumeParserService $resumeParser): RedirectResponse
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'resume_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+        'resume_text' => ['nullable', 'string'],
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $resumeText = $request->input('resume_text');
+    $resumePath = null;
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+    if ($request->hasFile('resume_pdf')) {
+        $resumePath = $request->file('resume_pdf')->store('resumes', 'local');
+        $resumeText = $resumeParser->extractText($request->file('resume_pdf'));
     }
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'resume_text' => $resumeText,
+        'resume_path' => $resumePath,
+    ]);
+
+    event(new Registered($user));
+
+    Auth::login($user);
+
+    return redirect(route('dashboard', absolute: false));
+}
 }
