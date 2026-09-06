@@ -1,8 +1,8 @@
-# JobTracker — AI-Powered Job Application Tracker
+# JobTracker, AI-Powered Job Application Tracker
 
 A full-stack job application tracker built with **Laravel, Inertia.js, and React**, featuring a drag-and-drop Kanban board, AI-powered resume match scoring, AI-generated cover letters, and application insights  built as a portfolio project to demonstrate full-stack + AI integration skills.
 
-**Live demo:** [add your Render URL here]
+**Live demo:** [Not Deployed yet but you can see code]
 **Demo account:** `demo@jobtracker.test` / `demo1234` (or use "Register" to create your own account)
 
 ---
