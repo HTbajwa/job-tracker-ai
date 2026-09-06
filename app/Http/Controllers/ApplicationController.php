@@ -18,19 +18,29 @@ class ApplicationController extends Controller
      * The frontend decides which layout to render; this controller just
      * hands over the (filtered) data both views need.
      */
-    public function index(Request $request): Response
-    {
-        $applications = $request->user()
-            ->applications()
-            ->filter($request->only(['search', 'status']))
-            ->latest('applied_date')
-            ->get();
+  public function index(Request $request): Response
+{
+    $filters = $request->only(['search', 'status']);
 
-        return Inertia::render('Applications/Index', [
-            'applications' => $applications,
-            'filters' => $request->only(['search', 'status']),
-        ]);
-    }
+    $paginated = $request->user()
+        ->applications()
+        ->filter($filters)
+        ->latest('applied_date')
+        ->paginate(15)
+        ->withQueryString();
+
+    $all = $request->user()
+        ->applications()
+        ->filter($filters)
+        ->latest('applied_date')
+        ->get();
+
+    return Inertia::render('Applications/Index', [
+        'applications' => $paginated,
+        'allApplications' => $all,
+        'filters' => $filters,
+    ]);
+}
 
     public function create(): Response
     {

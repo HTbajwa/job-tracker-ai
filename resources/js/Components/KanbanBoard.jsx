@@ -87,13 +87,13 @@ export default function KanbanBoard({ applications: serverApplications }) {
     return (
         <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {COLUMNS.map((column) => (
-                    <KanbanColumn key={column.status} status={column.status} title={column.title}>
-                        {applicationsByStatus(column.status).map((application) => (
-                            <KanbanCard key={application.id} application={application} />
-                        ))}
-                    </KanbanColumn>
-                ))}
+              {COLUMNS.map((column) => (
+    <KanbanColumn key={column.status} status={column.status} count={applicationsByStatus(column.status).length}>
+        {applicationsByStatus(column.status).map((application) => (
+            <KanbanCard key={application.id} application={application} />
+        ))}
+    </KanbanColumn>
+))}
             </div>
 
             <DragOverlay>

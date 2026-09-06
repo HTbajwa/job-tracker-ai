@@ -27,13 +27,16 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array<string, mixed>
      */
-    public function share(Request $request): array
-    {
-        return [
-            ...parent::share($request),
-            'auth' => [
-                'user' => $request->user(),
-            ],
-        ];
-    }
+  public function share(Request $request): array
+{
+    return [
+        ...parent::share($request),
+        'auth' => [
+            'user' => $request->user(),
+        ],
+        'navStats' => $request->user()
+            ? ['thisWeek' => $request->user()->applications()->where('created_at', '>=', now()->subDays(7))->count()]
+            : null,
+    ];
+}
 }

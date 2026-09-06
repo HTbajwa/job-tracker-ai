@@ -11,14 +11,15 @@ class DemoDataSeeder extends Seeder
 {
     public function run(): void
     {
-        $demoUser = User::firstOrCreate(
-            ['email' => 'demo@jobtracker.test'],
-            [
-                'name' => 'Demo Recruiter',
-                'password' => Hash::make('demo1234'),
-                'resume_text' => 'Full-stack developer skilled in Laravel, React, Inertia.js, Tailwind CSS, and MySQL/SQLite. Experience building REST APIs, authentication systems, and AI-integrated applications. Familiar with Git, GitHub Actions, and deploying to cloud platforms.',
-            ]
-        );
+       $demoUser = User::firstOrCreate(
+    ['email' => 'demo@jobtracker.test'],
+    [
+        'name' => 'Demo Recruiter',
+        'password' => Hash::make('demo1234'),
+        'resume_text' => 'Full-stack developer skilled in Laravel, React, Inertia.js, Tailwind CSS, and MySQL/SQLite. Experience building REST APIs, authentication systems, and AI-integrated applications. Familiar with Git, GitHub Actions, and deploying to cloud platforms.',
+        'email_verified_at' => now(),
+    ]
+);
 
         $samples = [
             ['company' => 'Google', 'role' => 'Frontend Engineer', 'status' => 'interview', 'applied_date' => now()->subDays(10)],
