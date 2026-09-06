@@ -8,7 +8,7 @@ use Smalot\PdfParser\Parser;
 class ResumeParserService
 {
     /**
-     * Extract plain text from an uploaded PDF resume.
+    **********************Extract plain text from Resume using parser and return it as a string**********************
      */
     public function extractText(UploadedFile $file): string
     {

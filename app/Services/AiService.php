@@ -19,9 +19,8 @@ class AiService
     }
 
     /**
-     * Compare a job description against the user's saved resume/skills text
-     * and return a match percentage + list of missing keywords/skills.
-     *
+     * ***********************COMPARE MAtch percentage and give results*************************************.
+    
      * @return array{match_score: int, missing_keywords: array<int, string>}
      */
     public function matchScore(string $resumeText, string $jobDescription): array
@@ -52,9 +51,7 @@ class AiService
         ];
     }
 
-    /**
-     * Draft a short, tailored cover letter for a specific job.
-     */
+//    ***************************Short Cover letter****************************************
     public function coverLetter(string $resumeText, string $jobDescription, string $company, string $role): string
     {
         $prompt = <<<PROMPT
@@ -76,13 +73,8 @@ class AiService
         return trim($this->generateText($prompt));
     }
 
-    /**
-     * A short natural-language summary of patterns across the user's stored
-     * applications (e.g. "Laravel/React roles get 3x more responses than
-     * WordPress roles"). $summaryInput is a compact, pre-aggregated
-     * description of the user's applications — we don't send raw records.
-     */
-    public function applicationInsights(string $summaryInput): string
+//   *************************Generate one two line with aggregated data that providing AI instead of hellucination**************
+     public function applicationInsights(string $summaryInput): string
     {
         $prompt = <<<PROMPT
             You are analyzing one person's job application history. Based on
@@ -100,13 +92,13 @@ class AiService
     }
 
     /**
-     * Low-level call expecting a JSON object back.
+     *****************string ko json smjh k php array me convert******************
      */
     protected function generateJson(string $prompt): array
     {
         $text = $this->generateText($prompt, jsonMode: true);
 
-        // Strip stray markdown fences in case the model adds them anyway.
+       
         $text = preg_replace('/^```(?:json)?|```$/m', '', trim($text));
 
         $decoded = json_decode(trim($text), true);
@@ -121,7 +113,7 @@ class AiService
     }
 
     /**
-     * Low-level call to Groq's OpenAI-compatible chat completions endpoint.
+     *********************Asli Groq ko phone call karo**************************
      */
     protected function generateText(string $prompt, bool $jsonMode = false): string
     {

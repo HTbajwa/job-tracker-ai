@@ -15,10 +15,7 @@ class AiMatchController extends Controller
     {
     }
 
-    /**
-     * Generate (or reuse a cached) match score + missing keywords for a
-     * given job description against this application.
-     */
+   // ***************************Generate new response or use a cached one with same job description****************
     public function matchScore(Request $request, Application $application): RedirectResponse
     {
         Gate::authorize('update', $application);
@@ -30,9 +27,7 @@ class AiMatchController extends Controller
         $jobDescription = $request->input('job_description');
         $hash = hash('sha256', $jobDescription);
 
-        // Rate-limit / cost control: if we've already scored this exact
-        // job description for this application, reuse that record
-        // instead of calling the AI provider again.
+       
         $existing = $application->aiMatches()
             ->where('job_description_hash', $hash)
             ->latest()
@@ -62,9 +57,8 @@ class AiMatchController extends Controller
         return back();
     }
 
-    /**
-     * Generate (or reuse a cached) cover letter for a given job description.
-     */
+     // ***************************Generate new response or use a cached one with same job description****************
+  
     public function coverLetter(Request $request, Application $application): RedirectResponse
     {
         Gate::authorize('update', $application);

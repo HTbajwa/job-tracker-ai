@@ -13,11 +13,7 @@ use Inertia\Response;
 
 class ApplicationController extends Controller
 {
-    /**
-     * Applications list — powers both the List view and the Kanban board.
-     * The frontend decides which layout to render; this controller just
-     * hands over the (filtered) data both views need.
-     */
+   
   public function index(Request $request): Response
 {
     $filters = $request->only(['search', 'status']);
@@ -93,10 +89,7 @@ class ApplicationController extends Controller
             ->with('success', 'Application moved to trash.');
     }
 
-    /**
-     * Dedicated endpoint for Kanban drag-and-drop — only the status
-     * changes, so it doesn't need the full update-validation payload.
-     */
+   //***********************Separate method to update status of application from list view and kanban board****************
     public function updateStatus(Request $request, Application $application): RedirectResponse
     {
         Gate::authorize('update', $application);

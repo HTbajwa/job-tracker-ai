@@ -44,6 +44,9 @@ class Application extends Model
         return $this->hasMany(AiMatch::class);
     }
 
+
+    // *********************************Filter only applied when one status selected and search by company or ****************
+    //*****************************role using sql  like so that one word even if matches it give results**********************************
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         return $query
