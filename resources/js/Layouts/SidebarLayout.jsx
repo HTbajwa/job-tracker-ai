@@ -135,7 +135,7 @@ export default function SidebarLayout({ header, children }) {
                     />
                 )}
 
-                <div className="min-h-screen flex-1 md:ml-0">
+            <div className="min-h-screen min-w-0 flex-1 overflow-x-hidden md:ml-0">
                     {header && (
                         <header className="border-b border-gray-200 bg-white px-6 py-5">
                             {header}
