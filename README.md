@@ -2,7 +2,7 @@
 
 A full-stack job application tracker built with **Laravel, Inertia.js, and React**, featuring a drag-and-drop Kanban board, AI-powered resume match scoring, AI-generated cover letters, and application insights  built as a portfolio project to demonstrate full-stack + AI integration skills.
 
-**Live demo:** [Not Deployed yet but you can see code]
+**Live demo:** [https://jobtracker.fruitsabzi.com/]
 **Demo account:** `demo@jobtracker.test` / `demo1234` (or use "Register" to create your own account)
 
 ---
@@ -36,6 +36,24 @@ A full-stack job application tracker built with **Laravel, Inertia.js, and React
 
 ---
 
+## Screenshots
+
+<table>
+<tr>
+<td width="33%"><img src="docs/screenshots/dasboard.png" alt="Dashboard"/><p align="center"><em>Dashboard</em></p></td>
+<td width="33%"><img src="docs/screenshots/Kanban_Board.png" alt="Kanban Board"/><p align="center"><em>Kanban Board</em></p></td>
+<td width="33%"><img src="docs/screenshots/Add_Application.png" alt="Add Application"/><p align="center"><em>Add Application</em></p></td>
+</tr>
+<tr>
+<td width="33%"><img src="docs/screenshots/Match_Score.png" alt="AI Match Score"/><p align="center"><em>AI Match Score</em></p></td>
+<td width="33%"><img src="docs/screenshots/cover_letter.png" alt="AI Cover Letter"/><p align="center"><em>AI Cover Letter</em></p></td>
+<td width="33%"><img src="docs/screenshots/Edit_Profile.png" alt="Profile"/><p align="center"><em>Profile</em></p></td>
+</tr>
+<tr>
+<td width="33%"><img src="docs/screenshots/login.png" alt="Login"/><p align="center"><em>Login</em></p></td>
+</tr>
+</table>
+
 ## Tech Stack
 
 | Layer | Choice |
@@ -48,18 +66,21 @@ A full-stack job application tracker built with **Laravel, Inertia.js, and React
 | AI | Groq API (OpenAI-compatible `/chat/completions`) |
 | PDF parsing | smalot/pdfparser |
 | Auth scaffolding | Laravel Breeze (Inertia + React stack) |
-| Deployment | Render (free web service) |
+| Deployment | Hostinger (shared hosting, subdomain) |
 
 ---
 
 ## Why these choices (a few notes for reviewers)
-
+- **Hostinger instead of a container-based free tier (e.g. Render)**  Render's free web services have an ephemeral filesystem (local files, including a SQLite database, are wiped on every restart/redeploy), and PHP isn't one of Render's native runtimes (it requires a Dockerfile). Shared hosting with persistent storage avoids both issues and keeps the SQLite-based architecture intact without adding container/orchestration complexity for a project of this scale.
 - **SQLite instead of MySQL**  the app's scale (a personal tracker, not a multi-tenant SaaS) doesn't need a separate database server. Using SQLite everywhere (dev and production) removes a whole layer of hosting cost/complexity and avoids MySQL/SQLite behavioral mismatches between environments.
 - **Groq instead of Gemini**  the project originally targeted the Gemini API, but Gemini's free tier required billing verification that wasn't available from this region at the time. AI calls are isolated behind a single `AiService` class, so switching providers meant changing one file  the controllers, routes, and frontend were untouched.
 - **Match Score / Insights don't let the AI invent numbers** anything statistical (application counts, response rates, percentages) is calculated in PHP from real database records. The AI is only ever asked to phrase or summarize numbers it's given, not calculate new ones  this avoids AI hallucination affecting anything the user could act on.
 - **Authorization via Policies**  every application-scoped route checks a `ApplicationPolicy` so one user can never view, edit, or run AI actions against another user's data, even via direct URL manipulation.
 
 ---
+## Design
+
+A custom design system (not the Breeze default)  deep teal + warm amber palette on a cream background, serif headings for a premium feel, a sidebar-based app shell, and consistent patterns across the app: icon-based stat cards, animated Kanban drag-and-drop, a reusable confirmation modal (replacing native `confirm()`/`alert()`), and a password-visibility toggle on all auth forms.
 
 ## Known Limitations (by design, for a demo project)
 
@@ -72,7 +93,7 @@ A full-stack job application tracker built with **Laravel, Inertia.js, and React
 ## Local Setup
 
 ### Requirements
-- PHP 8.3+
+- PHP 8.4+
 - Composer
 - Node.js + npm
 - A [Groq API key](https://console.groq.com/keys) (free, no credit card)
@@ -120,6 +141,7 @@ Run migrations and seed demo data:
 ```bash
 php artisan migrate
 php artisan db:seed --class=DemoDataSeeder
+php artisan storage:link
 ```
 
 Start the dev servers:
